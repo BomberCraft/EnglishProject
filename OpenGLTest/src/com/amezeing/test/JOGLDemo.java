@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.yourorghere;
+package com.amezeing.test;
 
 import com.sun.opengl.util.Animator;
 import java.awt.Frame;

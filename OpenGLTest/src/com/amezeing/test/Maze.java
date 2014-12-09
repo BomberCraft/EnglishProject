@@ -1,4 +1,4 @@
-package org.yourorghere;
+package com.amezeing.test;
 
 //Below is the syntax highlighted version of Maze.java from §4.1 Undirected Graphs.
 /**
@@ -197,5 +197,5 @@ public class Maze {
 
 }
 
-Copyright © 2002–2010, Robert Sedgewick and Kevin Wayne.
-Last updated: Sat Sep 6 14:30:22 EDT 2014.
+//Copyright © 2002–2010, Robert Sedgewick and Kevin Wayne.
+//Last updated: Sat Sep 6 14:30:22 EDT 2014.
