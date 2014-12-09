@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.yourorghere;
-
 
 import com.sun.opengl.util.Animator;
 import java.awt.Frame;
@@ -21,14 +19,15 @@ import javax.media.opengl.glu.GLU;
 
 /**
  * JOGLDemo.java <BR>
- * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel) <P>
+ * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel)
+ * <P>
  *
  * This version is equal to Brian Paul's version 1.2 1999/10/21
  */
 public class JOGLDemo implements GLEventListener, KeyListener {
 
-  float translateY = -1f;
-  float translateZ = 0f;
+    float translateY = -1f;
+    float translateZ = 0f;
 
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
@@ -70,7 +69,7 @@ public class JOGLDemo implements GLEventListener, KeyListener {
         // drawable.setGL(new DebugGL(drawable.getGL()));
 
         GL gl = drawable.getGL();
-     
+
         // Enable VSync
         gl.setSwapInterval(1);
 
@@ -84,7 +83,7 @@ public class JOGLDemo implements GLEventListener, KeyListener {
         GLU glu = new GLU();
 
         if (height <= 0) { // avoid a divide by zero error!
-        
+
             height = 1;
         }
         final float h = (float) width / (float) height;
@@ -107,28 +106,28 @@ public class JOGLDemo implements GLEventListener, KeyListener {
         gl.glRotatef(0f, 0f, 1f, 0f);
         // Move the "drawing cursor" around
         gl.glTranslatef(translateY, translateZ, -6f);
-        
-/*
-        // Drawing Using Triangles
-        gl.glBegin(GL.GL_TRIANGLES);
-            gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
-            gl.glVertex3f(0.0f, 1.0f, 0.0f);   // Top
-            gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
-            gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
-            gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
-            gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
-        // Finished Drawing The Triangle
-        gl.glEnd();
-*/
+
+        /*
+         // Drawing Using Triangles
+         gl.glBegin(GL.GL_TRIANGLES);
+         gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
+         gl.glVertex3f(0.0f, 1.0f, 0.0f);   // Top
+         gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
+         gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
+         gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
+         gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
+         // Finished Drawing The Triangle
+         gl.glEnd();
+         */
         // Move the "drawing cursor" to another position
         gl.glTranslatef(3.0f, 0.0f, 0.0f);
         // Draw A Quad
         gl.glBegin(GL.GL_QUADS);
-            gl.glColor3f(0.5f, 0.5f, 1.0f);    // Set the current drawing color to light blue
-            gl.glVertex3f(-0.5f, 0.5f, 0.0f);  // Top Left
-            gl.glVertex3f(0.5f, 0.5f, 0.0f);   // Top Right
-            gl.glVertex3f(0.5f, -0.5f, 0.0f);  // Bottom Right
-            gl.glVertex3f(-0.5f, -0.5f, 0.0f); // Bottom Left
+        gl.glColor3f(0.5f, 0.5f, 1.0f);    // Set the current drawing color to light blue
+        gl.glVertex3f(-0.5f, 0.5f, 0.0f);  // Top Left
+        gl.glVertex3f(0.5f, 0.5f, 0.0f);   // Top Right
+        gl.glVertex3f(0.5f, -0.5f, 0.0f);  // Bottom Right
+        gl.glVertex3f(-0.5f, -0.5f, 0.0f); // Bottom Left
         // Done Drawing The Quad
         gl.glEnd();
 
@@ -139,35 +138,26 @@ public class JOGLDemo implements GLEventListener, KeyListener {
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
     }
 
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            translateZ += .1f;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            translateZ -= .1f;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            translateY += .1f;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            translateY -= .1f;
+        }
 
-  public void keyPressed(KeyEvent e)
-  {
-    if (e.getKeyCode() == KeyEvent.VK_UP)
-    {
-      translateZ += .1f;
-    }
-    if (e.getKeyCode() == KeyEvent.VK_DOWN)
-    {
-      translateZ -= .1f;
-    }
-    if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-    {
-      translateY += .1f;
-    }
-    if (e.getKeyCode() == KeyEvent.VK_LEFT)
-    {
-      translateY -= .1f;
     }
 
-  }
+    public void keyReleased(KeyEvent e) {
+    }
 
-  public void keyReleased(KeyEvent e)
-  {
-  }
-
-  public void keyTyped(KeyEvent e)
-  {
-  }
+    public void keyTyped(KeyEvent e) {
+    }
 
 }
-
