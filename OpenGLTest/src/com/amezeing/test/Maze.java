@@ -188,7 +188,8 @@ public class Maze {
 
     // a test client
     public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]);
+        int N = 50;
+        //int N = Integer.parseInt(args[0]);
         Maze maze = new Maze(N);
         StdDraw.show(0);
         maze.draw();
