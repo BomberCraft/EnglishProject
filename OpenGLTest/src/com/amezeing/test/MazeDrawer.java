@@ -201,8 +201,8 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     public void init(GLAutoDrawable drawable) {
         GL gl = drawable.getGL();
 
-//        gl.glClearColor(.13f, .78f, .52f, 1);
-        gl.glClearColor((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
+        gl.glClearColor(1, 1, 1, 1);
+//        gl.glClearColor((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -239,10 +239,10 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 //~ StdDraw.filledCircle(N / 2.0 + 0.5, N / 2.0 + 0.5, 0.375);
 //~ StdDraw.filledCircle(1.5, 1.5, 0.375);
 
-        gl.glClearColor((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
+        gl.glLineWidth(1f);
 
 //        StdDraw.setPenColor(StdDraw.BLACK);
-        gl.glColor3d(Math.random(), Math.random(), Math.random());
+        gl.glColor3d(0, 0, 0);
         for (int x = 1; x <= N; x++) {
             for (int y = 1; y <= N; y++) {
                 gl.glLoadIdentity();
