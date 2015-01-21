@@ -120,11 +120,11 @@ public class Maze {
 
         StdDraw.setPenColor(StdDraw.BLUE);
         StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-        StdDraw.show(30);
+        StdDraw.show(3);
 
         // reached middle
         if (x == N / 2 && y == N / 2) {
-            done = true;
+//            done = true;
         }
 
         if (!north[x][y]) {
@@ -144,9 +144,9 @@ public class Maze {
             return;
         }
 
-        StdDraw.setPenColor(StdDraw.GRAY);
+        StdDraw.setPenColor(StdDraw.ORANGE);
         StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-        StdDraw.show(30);
+        StdDraw.show(3);
     }
 
     // solve the maze starting from the start state
@@ -183,12 +183,12 @@ public class Maze {
                 }
             }
         }
-        StdDraw.show(1000);
+        StdDraw.show(100);
     }
 
     // a test client
     public static void main(String[] args) {
-        int N = 50;
+        int N = 127;
         //int N = Integer.parseInt(args[0]);
         Maze maze = new Maze(N);
         StdDraw.show(0);

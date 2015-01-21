@@ -107,29 +107,29 @@ public class JOGLDemo implements GLEventListener, KeyListener {
         // Move the "drawing cursor" around
         gl.glTranslatef(translateY, translateZ, -6f);
 
-        /*
-         // Drawing Using Triangles
-         gl.glBegin(GL.GL_TRIANGLES);
-         gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
-         gl.glVertex3f(0.0f, 1.0f, 0.0f);   // Top
-         gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
-         gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
-         gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
-         gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
-         // Finished Drawing The Triangle
-         gl.glEnd();
-         */
-        // Move the "drawing cursor" to another position
-        gl.glTranslatef(3.0f, 0.0f, 0.0f);
-        // Draw A Quad
-        gl.glBegin(GL.GL_QUADS);
-        gl.glColor3f(0.5f, 0.5f, 1.0f);    // Set the current drawing color to light blue
-        gl.glVertex3f(-0.5f, 0.5f, 0.0f);  // Top Left
-        gl.glVertex3f(0.5f, 0.5f, 0.0f);   // Top Right
-        gl.glVertex3f(0.5f, -0.5f, 0.0f);  // Bottom Right
-        gl.glVertex3f(-0.5f, -0.5f, 0.0f); // Bottom Left
-        // Done Drawing The Quad
+//        /*
+        // Drawing Using Triangles
+        gl.glBegin(GL.GL_TRIANGLES);
+        gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
+        gl.glVertex3f(0.0f, 1.0f, 0.0f);   // Top
+        gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
+        gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
+        gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
+        gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
+        // Finished Drawing The Triangle
         gl.glEnd();
+//         */
+//        // Move the "drawing cursor" to another position
+//        gl.glTranslatef(3.0f, 0.0f, 0.0f);
+//        // Draw A Quad
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glColor3f(0.5f, 0.5f, 1.0f);    // Set the current drawing color to light blue
+//        gl.glVertex3f(-0.5f, 0.5f, 0.0f);  // Top Left
+//        gl.glVertex3f(0.5f, 0.5f, 0.0f);   // Top Right
+//        gl.glVertex3f(0.5f, -0.5f, 0.0f);  // Bottom Right
+//        gl.glVertex3f(-0.5f, -0.5f, 0.0f); // Bottom Left
+//        // Done Drawing The Quad
+//        gl.glEnd();
 
         // Flush all drawing operations to the graphics card
         //gl.glFlush();
