@@ -15,13 +15,15 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.glu.GLU;
 
 /**
  *
  * @author Bomber
  */
 public class MazeDrawer implements GLEventListener, KeyListener {
+
+    private int WIDTH = 1024;
+    private int HEIGHT = 768;
 
     private int N;                 // dimension of maze
     private boolean[][] north;     // is there a wall to north of cell i, j
@@ -36,7 +38,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     Animator animator;
 
     public static void main(String[] args) {
-        MazeDrawer mazeDrawer = new MazeDrawer(10);
+        MazeDrawer mazeDrawer = new MazeDrawer(127);
 
         mazeDrawer.draw();
 //        mazeDrawer.solve();
@@ -44,8 +46,8 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
     public MazeDrawer(int N) {
         this.N = N;
-        StdDraw.setScale(0, N + 2);
-        StdDraw.setYscale(0, N + 2);
+
+//~ StdDraw.setScale(0, N + 2);
         init();
         generate();
     }
@@ -80,7 +82,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         canvas.addKeyListener(this);
 
         frame.add(canvas);
-        frame.setSize(1024, 768);
+        frame.setSize(WIDTH, HEIGHT);
         frame.addWindowListener(new WindowAdapter() {
 
             @Override
@@ -146,10 +148,9 @@ public class MazeDrawer implements GLEventListener, KeyListener {
             return;
         }
         visited[x][y] = true;
-
-        StdDraw.setPenColor(StdDraw.BLUE);
-        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-        StdDraw.show(3);
+//~ StdDraw.setPenColor(StdDraw.BLUE);
+//~ StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
+//~ StdDraw.show(3);
 
         // reached middle
         if (x == N / 2 && y == N / 2) {
@@ -172,10 +173,9 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         if (done) {
             return;
         }
-
-        StdDraw.setPenColor(StdDraw.ORANGE);
-        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-        StdDraw.show(3);
+//~ StdDraw.setPenColor(StdDraw.ORANGE);
+//~ StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
+//~ StdDraw.show(3);
     }
 
     // solve the maze starting from the start state
@@ -195,73 +195,61 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         animator.start();
 
         display(canvas);
-
-        StdDraw.show(100);
+//~ StdDraw.show(100);
     }
 
     public void init(GLAutoDrawable drawable) {
-        // Use debug pipeline
-        // drawable.setGL(new DebugGL(drawable.getGL()));
-
         GL gl = drawable.getGL();
 
-        // Enable VSync
-        gl.setSwapInterval(1);
-
-        // Setup the drawing area and shading mode
-        gl.glClearColor(255f, 255f, 255f, 255f);
-        gl.glShadeModel(GL.GL_SMOOTH);
-        gl.glEnable(GL.GL_POINT_SMOOTH);
-        gl.glEnable(GL.GL_LINE_SMOOTH);
-        gl.glEnable(GL.GL_POLYGON_SMOOTH);
-        gl.glMatrixMode(GL.GL_MODELVIEW);
-
-        gl.glViewport(0, 0, N, N);
-        gl.glMatrixMode(GL.GL_PROJECTION);
-        gl.glLoadIdentity();
+//        gl.glClearColor(.13f, .78f, .52f, 1);
+        gl.glClearColor((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL gl = drawable.getGL();
-        GLU glu = new GLU();
 
-        if (height <= 0) { // avoid a divide by zero error!
-            height = 1;
-        }
+        WIDTH = width;
+        HEIGHT = height;
 
-        final float h = (float) width / (float) height;
         gl.glViewport(0, 0, width, height);
+
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(45.0f, h, 1.0, 20.0);
+        gl.glOrtho(0, N + 2, 0, N + 2, -1, 1);
+
+// toutes les transformations suivantes s´appliquent au modèle de vue
         gl.glMatrixMode(GL.GL_MODELVIEW);
-        gl.glLoadIdentity();
     }
 
     public void display(GLAutoDrawable drawable) {
         GL gl = drawable.getGL();
 
-//        System.out.println("display: " + drawable);
-        // Clear the drawing area
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        // Reset the current matrix to the "identity"
-        gl.glLoadIdentity();
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
+        render_scene(drawable);
+
+// trace la scène graphique qui vient juste d'être définie
+        gl.glFlush();
+    }
+
+    private void render_scene(GLAutoDrawable drawable) {
+        GL gl = drawable.getGL();
 //        gl.glColor3i(200, 50, 50);
 //        StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.filledCircle(N / 2.0 + 0.5, N / 2.0 + 0.5, 0.375);
-        StdDraw.filledCircle(1.5, 1.5, 0.375);
+//~ StdDraw.filledCircle(N / 2.0 + 0.5, N / 2.0 + 0.5, 0.375);
+//~ StdDraw.filledCircle(1.5, 1.5, 0.375);
 
-        StdDraw.setPenColor(StdDraw.BLACK);
+        gl.glClearColor((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
+
+//        StdDraw.setPenColor(StdDraw.BLACK);
+        gl.glColor3d(Math.random(), Math.random(), Math.random());
         for (int x = 1; x <= N; x++) {
-            gl.glTranslatef(x, 0, 0);
             for (int y = 1; y <= N; y++) {
-                gl.glLineWidth(10f);
-                gl.glTranslatef(0, y, 0);
+                gl.glLoadIdentity();
+                gl.glTranslatef(x, y, 0);
                 if (south[x][y]) {
 //                    StdDraw.line(x, y, x + 1, y);
                     gl.glBegin(GL.GL_LINES);
-                    gl.glColor3i(0, 0, 0);
                     gl.glVertex2i(0, 0);   // Top
                     gl.glVertex2i(1, 0); // Bottom Left
                     gl.glEnd();
@@ -269,7 +257,6 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 if (north[x][y]) {
 //                    StdDraw.line(x, y + 1, x + 1, y + 1);
                     gl.glBegin(GL.GL_LINES);
-                    gl.glColor3i(0, 0, 0);
                     gl.glVertex2i(0, 1);   // Top
                     gl.glVertex2i(1, 1); // Bottom Left
                     gl.glEnd();
@@ -277,7 +264,6 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 if (west[x][y]) {
 //                    StdDraw.line(x, y, x, y + 1);
                     gl.glBegin(GL.GL_LINES);
-                    gl.glColor3i(0, 0, 0);
                     gl.glVertex2i(0, 0);   // Top
                     gl.glVertex2i(0, 1); // Bottom Left
                     gl.glEnd();
@@ -285,14 +271,12 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 if (east[x][y]) {
 //                    StdDraw.line(x + 1, y, x + 1, y + 1);
                     gl.glBegin(GL.GL_LINES);
-                    gl.glColor3i(0, 0, 0);
                     gl.glVertex2i(1, 0);   // Top
                     gl.glVertex2i(1, 1); // Bottom Left
                     gl.glEnd();
                 }
             }
         }
-        gl.glFlush();
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
