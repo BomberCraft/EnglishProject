@@ -6,7 +6,10 @@
 package com.amezeing.test;
 
 import com.sun.opengl.util.Animator;
+import java.awt.Event;
 import java.awt.Frame;
+import java.awt.Menu;
+import java.awt.MenuBar;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -92,6 +95,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
         X = 1;
         Y = 1;
+        done = false;
     }
 
     private void initFrame() {
@@ -121,6 +125,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 }).start();
             }
         });
+
         // Center frame
         frame.setLocationRelativeTo(null);
     }
@@ -195,7 +200,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         if (x == N / 2 && y == N / 2) {
             done = true;
             JOptionPane.showMessageDialog(null, "You win the game, bro !", "GOOD JOB",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (!north[x][y]) {
@@ -371,12 +376,12 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
         gl.glColor3f(.1f, 1.0f, .2f);
         gl.glBegin(GL.GL_QUADS);
-        gl.glVertex2f(N/2 +.1f, N/2 +.1f);
-        gl.glVertex2f(N/2 + .1f, N/2 +.9f);
-        gl.glVertex2f(N/2 + .9f, N/2 + .9f);
-        gl.glVertex2f(N/2 + .9f, N/2 + .1f);
+        gl.glVertex2f(N / 2 + .1f, N / 2 + .1f);
+        gl.glVertex2f(N / 2 + .1f, N / 2 + .9f);
+        gl.glVertex2f(N / 2 + .9f, N / 2 + .9f);
+        gl.glVertex2f(N / 2 + .9f, N / 2 + .1f);
         gl.glEnd();
-        
+
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
@@ -388,6 +393,12 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int x = (int) X;
         int y = (int) Y;
+
+        if (done) {
+            e.consume();
+
+            return;
+        }
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_RIGHT:
