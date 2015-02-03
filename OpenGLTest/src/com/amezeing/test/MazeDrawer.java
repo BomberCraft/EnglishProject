@@ -7,17 +7,24 @@ package com.amezeing.test;
 
 import com.sun.opengl.util.Animator;
 import java.awt.Frame;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.SeparatorMenuItem;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 /**
@@ -92,6 +99,8 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
         X = 1;
         Y = 1;
+
+        done = false;
     }
 
     private void initFrame() {
@@ -99,6 +108,22 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         this.canvas = new GLCanvas();
         this.animator = new Animator(canvas);
 
+        //Menu 
+        MenuBar menuBar = new MenuBar();
+        Menu fichier = new Menu("Menu");
+        Menu test1 = new Menu("Restart");
+        Menu test2 = new Menu("Size");
+        Menu test3 = new Menu("Solve");
+        Menu test4 = new Menu("Close");
+        MenuItem separator = new MenuItem();
+        menuBar.add(fichier);
+        fichier.add(test1);
+        fichier.add(test2);
+        fichier.add(test3);
+        fichier.addSeparator();
+        fichier.add(test4);
+        frame.setMenuBar(menuBar);
+        
         canvas.addGLEventListener(this);
         frame.addKeyListener(this);
         canvas.addKeyListener(this);
@@ -168,7 +193,29 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         }
     }
 
-    // solve the maze using depth-first search
+    //Show a message
+    private void messageYesNo(String yes, String no, String message, String title) {
+        int option;
+        String[] text = new String[2];
+        text[0] = "Sure !";
+        text[1] = "No I'm tired...";
+        option = JOptionPane.showOptionDialog(null,
+                "Congratulations !"
+                + "\nDo you want to restart ?",
+                "The End",
+                0, JOptionPane.INFORMATION_MESSAGE,
+                null,
+                text,
+                null);
+        if (option == JOptionPane.OK_OPTION) {
+            restart();
+        } else {
+            frame.dispose();
+            System.exit(0);
+        }
+    }
+
+// solve the maze using depth-first search
     private void solve(int x, int y) {
         long speed = 3;
         if (x == 0 || y == 0 || x == N + 1 || y == N + 1) {
@@ -188,14 +235,17 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         try {
 //~ StdDraw.show(3);
             solve.sleep(speed);
+
         } catch (InterruptedException ex) {
-            Logger.getLogger(MazeDrawer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MazeDrawer.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 // reached middle
         if (x == N / 2 && y == N / 2) {
             done = true;
-            JOptionPane.showMessageDialog(null, "You win the game, bro !", "GOOD JOB",
-                                    JOptionPane.INFORMATION_MESSAGE);
+            messageYesNo("Sure !", "No I'm tired...", "Congratulations !"
+                    + "\nDo you want to restart ?", "The End");
+            restart();
         }
 
         if (!north[x][y]) {
@@ -222,8 +272,10 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         try {
 //~ StdDraw.show(3);
             solve.sleep(speed);
+
         } catch (InterruptedException ex) {
-            Logger.getLogger(MazeDrawer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MazeDrawer.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -371,12 +423,12 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
         gl.glColor3f(.1f, 1.0f, .2f);
         gl.glBegin(GL.GL_QUADS);
-        gl.glVertex2f(N/2 +.1f, N/2 +.1f);
-        gl.glVertex2f(N/2 + .1f, N/2 +.9f);
-        gl.glVertex2f(N/2 + .9f, N/2 + .9f);
-        gl.glVertex2f(N/2 + .9f, N/2 + .1f);
+        gl.glVertex2f(N / 2 + .1f, N / 2 + .1f);
+        gl.glVertex2f(N / 2 + .1f, N / 2 + .9f);
+        gl.glVertex2f(N / 2 + .9f, N / 2 + .9f);
+        gl.glVertex2f(N / 2 + .9f, N / 2 + .1f);
         gl.glEnd();
-        
+
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
