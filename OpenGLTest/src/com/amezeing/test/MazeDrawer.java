@@ -17,6 +17,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -47,7 +49,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     boolean first;
 
     public static void main(String[] args) {
-        MazeDrawer mazeDrawer = new MazeDrawer(20);
+        MazeDrawer mazeDrawer = new MazeDrawer(50);
 
         mazeDrawer.draw();
 //        mazeDrawer.solve();
@@ -192,6 +194,8 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 // reached middle
         if (x == N / 2 && y == N / 2) {
             done = true;
+            JOptionPane.showMessageDialog(null, "You win the game, bro !", "GOOD JOB",
+                                    JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (!north[x][y]) {
@@ -365,6 +369,14 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         gl.glVertex2f(X + .9f, Y + .1f);
         gl.glEnd();
 
+        gl.glColor3f(.1f, 1.0f, .2f);
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex2f(N/2 +.1f, N/2 +.1f);
+        gl.glVertex2f(N/2 + .1f, N/2 +.9f);
+        gl.glVertex2f(N/2 + .9f, N/2 + .9f);
+        gl.glVertex2f(N/2 + .9f, N/2 + .1f);
+        gl.glEnd();
+        
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
