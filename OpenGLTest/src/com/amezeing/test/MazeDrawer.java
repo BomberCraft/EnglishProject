@@ -106,17 +106,18 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         //Menu
         MenuBar menuBar = new MenuBar();
         Menu fichier = new Menu("Menu");
-        Menu test1 = new Menu("Restart");
-        Menu test2 = new Menu("Size");
-        Menu test3 = new Menu("Solve");
-        Menu test4 = new Menu("Close");
-        MenuItem separator = new MenuItem();
+        MenuItem restartMenu = new MenuItem("Restart");
+        MenuItem resizeMenu = new MenuItem("Size");
+        MenuItem solveMenu = new MenuItem("Solve");
+        MenuItem closeMenu = new MenuItem("Close");
         menuBar.add(fichier);
-        fichier.add(test1);
-        fichier.add(test2);
-        fichier.add(test3);
+
+        fichier.add(restartMenu);
+        fichier.add(resizeMenu);
+        fichier.add(solveMenu);
         fichier.addSeparator();
-        fichier.add(test4);
+        fichier.add(closeMenu);
+
         frame.setMenuBar(menuBar);
 
         canvas.addGLEventListener(this);
