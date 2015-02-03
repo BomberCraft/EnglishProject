@@ -10,6 +10,8 @@ import java.awt.Frame;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -21,6 +23,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -118,33 +121,93 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         fichier.addSeparator();
         fichier.add(closeMenu);
 
+        restartMenu.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                int option;
+                String[] test = new String[]{"Yes", "No"};
+                option = JOptionPane.showOptionDialog(null,
+                        "Do you want to restart ?",
+                        "Hi",
+                        0, JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        test,
+                        null);
+                if (option == JOptionPane.OK_OPTION) {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            restart();
+                        }
+                    });
+                }
+            }
+        }
+        );
+
+        solveMenu.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            solve();
+                        }
+                    });
+            }
+        }
+        );
+        
+        closeMenu.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            System.exit(0);
+                        }
+                    });
+            }
+        }
+        );
+        
+
         frame.setMenuBar(menuBar);
 
-        canvas.addGLEventListener(this);
-        frame.addKeyListener(this);
-        canvas.addKeyListener(this);
+        canvas.addGLEventListener(
+                this);
+        frame.addKeyListener(
+                this);
+        canvas.addKeyListener(
+                this);
 
         frame.add(canvas);
+
         frame.setSize(WIDTH, HEIGHT);
-        frame.addWindowListener(new WindowAdapter() {
 
-            @Override
-            public void windowClosing(WindowEvent e) {
-                // Run this on another thread than the AWT event queue to
-                // make sure the call to Animator.stop() completes before
-                // exiting
-                new Thread(new Runnable() {
+        frame.addWindowListener(
+                new WindowAdapter() {
 
-                    public void run() {
-                        animator.stop();
-                        System.exit(0);
+                    @Override
+                    public void windowClosing(WindowEvent e
+                    ) {
+                        // Run this on another thread than the AWT event queue to
+                        // make sure the call to Animator.stop() completes before
+                        // exiting
+                        new Thread(new Runnable() {
+
+                            public void run() {
+                                animator.stop();
+                                System.exit(0);
+                            }
+                        }).start();
                     }
-                }).start();
-            }
-        });
+                }
+        );
 
         // Center frame
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(
+                null);
     }
 
     // generate the maze
