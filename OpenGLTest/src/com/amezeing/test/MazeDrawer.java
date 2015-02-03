@@ -11,10 +11,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -24,6 +27,10 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
     private int WIDTH = 1024;
     private int HEIGHT = 768;
+
+    private float X = 1;
+    private float Y = 1;
+    private float SCALE = 1f;
 
     private int N;                 // dimension of maze
     private boolean[][] north;     // is there a wall to north of cell i, j
@@ -36,6 +43,9 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     Frame frame;
     GLCanvas canvas;
     Animator animator;
+
+    Thread solve;
+    boolean first;
 
     public static void main(String[] args) {
         MazeDrawer mazeDrawer = new MazeDrawer(127);
@@ -132,27 +142,44 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 }
             }
         }
+
     }
 
     // generate the maze starting from lower left
     private void generate() {
         generate(1, 1);
+
+        for (int x = 1; x <= N; x++) {
+            for (int y = 1; y <= N; y++) {
+                visited[x][y] = false;
+            }
+        }
     }
 
     // solve the maze using depth-first search
     private void solve(int x, int y) {
+        long speed = 3;
         if (x == 0 || y == 0 || x == N + 1 || y == N + 1) {
             return;
         }
         if (done || visited[x][y]) {
             return;
         }
-        visited[x][y] = true;
+
 //~ StdDraw.setPenColor(StdDraw.BLUE);
 //~ StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-//~ StdDraw.show(3);
+        X = x;
+        Y = y;
+        first = true;
 
-        // reached middle
+        visited[x][y] = true;
+        try {
+//~ StdDraw.show(3);
+            solve.sleep(speed);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MazeDrawer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+// reached middle
         if (x == N / 2 && y == N / 2) {
 //            done = true;
         }
@@ -175,7 +202,15 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         }
 //~ StdDraw.setPenColor(StdDraw.ORANGE);
 //~ StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
+        X = x;
+        Y = y;
+        first = false;
+        try {
 //~ StdDraw.show(3);
+            solve.sleep(speed);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MazeDrawer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // solve the maze starting from the start state
@@ -185,8 +220,16 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 visited[x][y] = false;
             }
         }
+
         done = false;
-        solve(1, 1);
+        solve = new Thread(new Runnable() {
+
+            public void run() {
+                solve(1, 1);
+            }
+        });
+
+        solve.start();
     }
 
     // draw the maze
@@ -194,7 +237,6 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         frame.setVisible(true);
         animator.start();
 
-        display(canvas);
 //~ StdDraw.show(100);
     }
 
@@ -239,13 +281,13 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 //~ StdDraw.filledCircle(N / 2.0 + 0.5, N / 2.0 + 0.5, 0.375);
 //~ StdDraw.filledCircle(1.5, 1.5, 0.375);
 
-        gl.glLineWidth(1f);
+        gl.glLineWidth(2f);
 
 //        StdDraw.setPenColor(StdDraw.BLACK);
-        gl.glColor3d(0, 0, 0);
         for (int x = 1; x <= N; x++) {
             for (int y = 1; y <= N; y++) {
                 gl.glLoadIdentity();
+                gl.glColor3d(0, 0, 0);
                 gl.glTranslatef(x, y, 0);
                 if (south[x][y]) {
 //                    StdDraw.line(x, y, x + 1, y);
@@ -275,8 +317,29 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                     gl.glVertex2i(1, 1); // Bottom Left
                     gl.glEnd();
                 }
+                if (visited[x][y]) {
+                    gl.glColor4f(.7f, .8f, .9f, .1f);
+
+                    gl.glBegin(GL.GL_QUADS);
+                    gl.glVertex2f(.05f, .05f);
+                    gl.glVertex2f(.05f, .95f);
+                    gl.glVertex2f(.95f, .95f);
+                    gl.glVertex2f(.95f, .05f);
+                    gl.glEnd();
+                }
             }
         }
+
+        gl.glColor3f(1.0f, .1f, .1f);
+        gl.glLoadIdentity();
+
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex2f(X + .1f, Y + .1f);
+        gl.glVertex2f(X + .1f, Y + .9f);
+        gl.glVertex2f(X + .9f, Y + .9f);
+        gl.glVertex2f(X + .9f, Y + .1f);
+        gl.glEnd();
+
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
@@ -286,9 +349,36 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+        int x = (int) X;
+        int y = (int) Y;
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_RIGHT:
+                X += east[x][y] ? 0 : SCALE;
+                break;
+            case KeyEvent.VK_LEFT:
+                X -= west[x][y] ? 0 : SCALE;
+                break;
+            case KeyEvent.VK_UP:
+                Y += north[x][y] ? 0 : SCALE;
+                break;
+            case KeyEvent.VK_DOWN:
+                Y -= south[x][y] ? 0 : SCALE;
+                break;
+        }
+
+        visited[x][y] = true;
+//        System.out.println("[keyPressed]: X: " + X + ", Y: " + Y + ", KeyEvent: " + KeyEvent.getKeyText(e.getKeyCode()));
     }
 
     public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_P:
+                System.out.println("[keyReleased] KeyEvent.VK_P");
+                solve();
+                break;
+        }
+
     }
 
 }

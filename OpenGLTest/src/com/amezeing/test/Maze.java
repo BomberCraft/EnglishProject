@@ -193,7 +193,7 @@ public class Maze {
         Maze maze = new Maze(N);
         StdDraw.show(0);
         maze.draw();
-//        maze.solve();
+        maze.solve();
     }
 
 }
