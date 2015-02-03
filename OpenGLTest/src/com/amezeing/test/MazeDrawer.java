@@ -17,7 +17,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -48,7 +47,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     boolean first;
 
     public static void main(String[] args) {
-        MazeDrawer mazeDrawer = new MazeDrawer(127);
+        MazeDrawer mazeDrawer = new MazeDrawer(20);
 
         mazeDrawer.draw();
 //        mazeDrawer.solve();
@@ -63,6 +62,12 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     }
 
     private void init() {
+        initMaze();
+        initFrame();
+
+    }
+
+    private void initMaze() {
         // initialize border cells as already visited
         visited = new boolean[N + 2][N + 2];
         for (int x = 0; x < N + 2; x++) {
@@ -83,6 +88,11 @@ public class MazeDrawer implements GLEventListener, KeyListener {
             }
         }
 
+        X = 1;
+        Y = 1;
+    }
+
+    private void initFrame() {
         this.frame = new Frame("Simple Maze Drawer");
         this.canvas = new GLCanvas();
         this.animator = new Animator(canvas);
@@ -181,7 +191,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         }
 // reached middle
         if (x == N / 2 && y == N / 2) {
-//            done = true;
+            done = true;
         }
 
         if (!north[x][y]) {
@@ -215,6 +225,10 @@ public class MazeDrawer implements GLEventListener, KeyListener {
 
     // solve the maze starting from the start state
     public void solve() {
+        if (solve != null) {
+            return;
+        }
+
         for (int x = 1; x <= N; x++) {
             for (int y = 1; y <= N; y++) {
                 visited[x][y] = false;
@@ -238,6 +252,17 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         animator.start();
 
 //~ StdDraw.show(100);
+    }
+
+    private void restart() {
+        if (solve != null) {
+            solve.stop();
+            solve = null;
+        }
+
+        initMaze();
+        generate();
+
     }
 
     public void init(GLAutoDrawable drawable) {
@@ -374,8 +399,10 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_P:
-                System.out.println("[keyReleased] KeyEvent.VK_P");
                 solve();
+                break;
+            case KeyEvent.VK_R:
+                restart();
                 break;
         }
 
