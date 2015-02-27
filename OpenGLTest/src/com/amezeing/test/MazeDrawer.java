@@ -6,6 +6,7 @@
 package com.amezeing.test;
 
 import com.sun.opengl.util.Animator;
+import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.Menu;
 import java.awt.MenuBar;
@@ -22,8 +23,14 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -45,6 +52,8 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     private boolean[][] west;
     private boolean[][] visited;
     private boolean done = false;
+    int interN = N;
+    JLabel label = new JLabel("Size : 30");
 
     Frame frame;
     GLCanvas canvas;
@@ -54,7 +63,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
     boolean first;
 
     public static void main(String[] args) {
-        MazeDrawer mazeDrawer = new MazeDrawer(50);
+        MazeDrawer mazeDrawer = new MazeDrawer(30);
 
         mazeDrawer.draw();
 //        mazeDrawer.solve();
@@ -121,6 +130,51 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         fichier.addSeparator();
         fichier.add(closeMenu);
 
+        resizeMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+
+                JFrame thframe = new JFrame();
+                thframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                thframe.setSize(250, 150);
+                thframe.setTitle("Size ?");
+                thframe.setLocationRelativeTo(null);
+                
+                JSlider slide = new JSlider();
+                slide.setMaximum(100);
+                slide.setMinimum(10);
+                slide.setValue(30);
+                slide.setPaintTicks(true);
+                slide.setPaintLabels(true);
+                slide.setMinorTickSpacing(10);
+                slide.setMajorTickSpacing(20);
+                slide.setVisible(true);
+                slide.addChangeListener(new ChangeListener() {
+                    public void stateChanged(ChangeEvent event) {
+
+                        label.setText("Size : " + ((JSlider) event.getSource()).getValue());
+                        interN = ((JSlider) event.getSource()).getValue();
+                    }
+                });
+                
+                JButton buttonOK = new JButton();
+                buttonOK.setText("OK");
+                buttonOK.setVisible(true);
+                buttonOK.addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent ae) {
+                        N = interN;
+                        frame.setSize(WIDTH, HEIGHT);
+                        restart();
+                    }
+                    
+                });
+                thframe.getContentPane().add(buttonOK, BorderLayout.EAST);
+                thframe.getContentPane().add(slide, BorderLayout.CENTER);
+                thframe.getContentPane().add(label, BorderLayout.SOUTH);
+                thframe.setVisible(true);
+            }
+        }
+        );
         restartMenu.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
@@ -150,27 +204,26 @@ public class MazeDrawer implements GLEventListener, KeyListener {
             public void actionPerformed(ActionEvent ae) {
                 SwingUtilities.invokeLater(new Runnable() {
 
-                        public void run() {
-                            solve();
-                        }
-                    });
+                    public void run() {
+                        solve();
+                    }
+                });
             }
         }
         );
-        
+
         closeMenu.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
                 SwingUtilities.invokeLater(new Runnable() {
 
-                        public void run() {
-                            System.exit(0);
-                        }
-                    });
+                    public void run() {
+                        System.exit(0);
+                    }
+                });
             }
         }
         );
-        
 
         frame.setMenuBar(menuBar);
 
