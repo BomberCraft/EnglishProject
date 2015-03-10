@@ -133,12 +133,12 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         resizeMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
 
-                JFrame thframe = new JFrame();
+                final JFrame thframe = new JFrame();
                 thframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 thframe.setSize(250, 150);
                 thframe.setTitle("Size ?");
                 thframe.setLocationRelativeTo(null);
-                
+
                 JSlider slide = new JSlider();
                 slide.setMaximum(100);
                 slide.setMinimum(10);
@@ -155,7 +155,7 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                         interN = ((JSlider) event.getSource()).getValue();
                     }
                 });
-                
+
                 JButton buttonOK = new JButton();
                 buttonOK.setText("OK");
                 buttonOK.setVisible(true);
@@ -165,8 +165,9 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                         N = interN;
                         frame.setSize(WIDTH, HEIGHT);
                         restart();
+                        thframe.dispose();
                     }
-                    
+
                 });
                 thframe.getContentPane().add(buttonOK, BorderLayout.EAST);
                 thframe.getContentPane().add(slide, BorderLayout.CENTER);
@@ -553,9 +554,9 @@ public class MazeDrawer implements GLEventListener, KeyListener {
         int x = (int) X;
         int y = (int) Y;
 
+        
         if (done) {
             e.consume();
-
             return;
         }
 
@@ -574,8 +575,10 @@ public class MazeDrawer implements GLEventListener, KeyListener {
                 break;
         }
 
+        
         visited[x][y] = true;
-//        System.out.println("[keyPressed]: X: " + X + ", Y: " + Y + ", KeyEvent: " + KeyEvent.getKeyText(e.getKeyCode()));
+//        System.out.println("[keyPressed]: X: " + X + ", Y: " + Y + ", KeyEvent: " + KeyEvent.getKeyText(e.getKeyCode()));        
+        
     }
 
     public void keyReleased(KeyEvent e) {
